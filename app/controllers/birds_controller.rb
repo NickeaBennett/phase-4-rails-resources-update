@@ -5,7 +5,7 @@ class BirdsController < ApplicationController
     birds = Bird.all
     render json: birds
   end
-
+  
   # POST /birds
   def create
     bird = Bird.create(bird_params)
@@ -21,11 +21,25 @@ class BirdsController < ApplicationController
       render json: { error: "Bird not found" }, status: :not_found
     end
   end
+  
+  # UPDATE /birds
+  def update
+    bird = Bird.find_by(id: params[:id])
+    bird.update(bird_params)
+    render json: bird
+  end
+
+  #CUSTOM UPDATE /birds
+  def increment_likes
+    bird = Bird.find_by(id: params[:id])
+    bird.update(likes: bird.likes + 1)
+    render json: bird
+  end
 
   private
 
   def bird_params
-    params.permit(:name, :species)
+    params.permit(:name, :species, :likes)
   end
 
 end
